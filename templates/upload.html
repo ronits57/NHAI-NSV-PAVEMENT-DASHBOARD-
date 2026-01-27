@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload NSV Data</title>
+</head>
+<body>
+
+<h2>Upload NSV CSV + Dashboard Camera Video</h2>
+
+<form action="/analyze" method="POST" enctype="multipart/form-data">
+    
+    <label>Upload CSV File:</label><br>
+    <input type="file" name="file" required><br><br>
+
+    <label>Upload Dashboard Camera Video (optional):</label><br>
+    <input type="file" name="video" accept="video/*"><br><br>
+
+    <button type="submit">Analyze</button>
+
+</form>
+
+</body>
+</html>

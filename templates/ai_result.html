@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Road Inspection Result</title>
+</head>
+<body>
+
+<h2>AI Visual Road Inspection Result</h2>
+
+<p><b>Potholes Detected:</b> {{ potholes }}</p>
+<p><b>Cracks Detected:</b> {{ cracks }}</p>
+<p><b>Road Health Score:</b> {{ health_score }} / 100</p>
+<p><b>Condition:</b> {{ condition }}</p>
+<p><b>Recommended Action:</b> {{ action }}</p>
+
+<hr>
+
+<img src="/ai_outputs/{{ image }}" width="600">
+
+<br><br>
+<a href="/ai-image">Analyze Another Image</a>
+
+</body>
+</html>

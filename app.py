@@ -163,7 +163,6 @@ def ai_image():
         return render_template(
             "ai_result.html",
             potholes=result["potholes"],
-            cracks=result["cracks"],
             health_score=result["health_score"],
             condition=result["condition"],
             action=result["action"],

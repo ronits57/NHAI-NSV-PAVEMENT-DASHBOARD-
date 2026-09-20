@@ -1,47 +1,46 @@
 from ultralytics import YOLO
+import cv2
 import os
 
-# Load trained model ONCE
-MODEL_PATH = r"C:\Users\Ronit\OneDrive\Desktop\road_ai\runs\detect\train5\weights\best.pt"
+# LOAD YOUR TRAINED MODEL (IMPORTANT)
+MODEL_PATH = r"C:\Users\Ronit\OneDrive\Desktop\road_ai\runs\detect\train4\weights\best.pt"
 model = YOLO(MODEL_PATH)
 
 def detect_road_damage(image_path):
-    results = model(image_path, conf=0.25)
+    results = model(image_path, conf=0.2)
 
-    potholes = 0
-    cracks = 0
+    pothole_count = 0
+    output_image_path = None
 
     for r in results:
-        if r.boxes is None:
-            continue
+        pothole_count = len(r.boxes)
 
-        for box in r.boxes:
-            cls_id = int(box.cls[0])
+        # Save image with boxes
+        img = r.plot()
+        os.makedirs("ai_outputs", exist_ok=True)
+        output_image_path = os.path.join("ai_outputs", "result.jpg")
+        cv2.imwrite(output_image_path, img)
 
-            if cls_id == 0:      # pothole
-                potholes += 1
-            elif cls_id == 1:    # crack
-                cracks += 1
+    # Simple road health logic
+    health_score = max(0, 100 - pothole_count * 5)
 
-    total = potholes + cracks
-
-    # Simple scoring
-    health_score = max(0, 100 - (potholes * 5 + cracks * 3))
-
-    if health_score > 80:
+    if pothole_count == 0:
         condition = "Good"
-        action = "No action required"
-    elif health_score > 60:
+        action = "No action needed"
+    elif pothole_count <= 3:
         condition = "Fair"
-        action = "Monitor and minor repairs"
-    else:
+        action = "Monitor road condition"
+    elif pothole_count <= 6:
         condition = "Poor"
-        action = "Immediate maintenance required"
+        action = "Schedule maintenance"
+    else:
+        condition = "Very Poor"
+        action = "Immediate repair required"
 
     return {
-        "potholes": potholes,
-        "cracks": cracks,
+        "potholes": pothole_count,
         "health_score": health_score,
         "condition": condition,
-        "action": action
+        "action": action,
+        "output_image": "result.jpg"
     }
